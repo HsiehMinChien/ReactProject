@@ -19,13 +19,17 @@ function App() {
   const [order, setOrder] = React.useState([]);
   const [open, setOpen] = React.useState(false);
 
-  // Fetch patients
-  React.useEffect(() => {
+  const fetchPatientsData = () => {
     axios.get(`${basicApiUrl}/patient`)
       .then((response) => {
         setPatients(response.data);
       })
       .catch((err) => console.log(err));
+  };
+
+  // Fetch patients
+  React.useEffect(() => {
+    fetchPatientsData();
   }, []);
 
   const handleClickOpen = (orderId) => {
@@ -36,6 +40,16 @@ function App() {
       })
       .catch((err) => console.log(err));
     setOpen(true);
+  };
+
+  const handleSubmit = (message, orderId, patientId) => {
+    axios.put(`${basicApiUrl}/orders/${orderId}`, { message, patientId })
+      .then(() => {
+        // Refetch patient data.
+        fetchPatientsData();
+      })
+      .catch((err) => console.log(err));
+    setOpen(false);
   };
 
   const handleClose = () => {
@@ -62,6 +76,7 @@ function App() {
         patient={selectedPatient}
         orders={order}
         onClose={handleClose}
+        onSubmit={handleSubmit}
       />
     </ThemeProvider>
   );

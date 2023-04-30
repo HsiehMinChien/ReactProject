@@ -15,9 +15,10 @@ export default function OrderDialog({
   onClose,
   patient,
   orders,
+  onSubmit,
 }) {
   const [isEditMode, setIsEditMode] = React.useState(false);
-  const [nextOrder, setNextOrder] = React.useState('');
+  const [nextOrderMessage, setNextOrderMessage] = React.useState('');
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -28,13 +29,20 @@ export default function OrderDialog({
   };
 
   const handleClickEdit = () => {
-    setNextOrder(getOrderMessage());
+    setNextOrderMessage(getOrderMessage());
     setIsEditMode(true);
   };
 
   const handleClickCancel = () => {
-    setNextOrder('');
+    setNextOrderMessage('');
     setIsEditMode(false);
+  };
+
+  const handleSubmit = () => {
+    const [{ id: orderId } = {}] = orders;
+    const { id: patientId } = patient;
+    onSubmit(nextOrderMessage, orderId, patientId);
+    handleClickCancel();
   };
 
   const renderDialogContent = () => {
@@ -55,13 +63,13 @@ export default function OrderDialog({
               type="text"
               fullWidth
               variant="standard"
-              value={nextOrder}
-              onChange={(e) => setNextOrder(e.target.value)}
+              value={nextOrderMessage}
+              onChange={(e) => setNextOrderMessage(e.target.value)}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClickCancel}>Cancel</Button>
-            <Button onClick={() => {}}>Submit</Button>
+            <Button onClick={handleSubmit}>Submit</Button>
           </DialogActions>
         </>
       );
@@ -110,11 +118,14 @@ OrderDialog.defaultProps = {
 OrderDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   patient: PropTypes.shape({
+    id: PropTypes.number,
     name: PropTypes.string,
     orderid: PropTypes.number,
   }),
   orders: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
     message: PropTypes.string,
   })),
 };

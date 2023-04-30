@@ -15,7 +15,7 @@ export default function PatientsList({ patients, onItemClick }) {
       <>
         {patients.map((patient, index) => (
           <ListItemButton
-            key={`${patient.name}-${patient.orderid}`}
+            key={`${patient.id}-${patient.name}-${patient.orderid}`}
             onClick={() => onItemClick(patient)}
           >
             <ListItemIcon>
