@@ -6,6 +6,7 @@ import Container from '@mui/material/Container';
 import { basicApiUrl } from './config';
 import PatientsList from './components/PatientList';
 import OrderDialog from './components/OrderDialog';
+import ErrorToast from './components/ErrorToast';
 
 const darkTheme = createTheme({
   palette: {
@@ -18,13 +19,19 @@ function App() {
   const [selectedPatient, setSelectedPatient] = React.useState();
   const [order, setOrder] = React.useState([]);
   const [open, setOpen] = React.useState(false);
+  const [toastMessage, setToastMessage] = React.useState('');
+
+  const handleQueryError = (err) => {
+    console.log(err);
+    setToastMessage(err.message);
+  };
 
   const fetchPatientsData = () => {
     axios.get(`${basicApiUrl}/patient`)
       .then((response) => {
         setPatients(response.data);
       })
-      .catch((err) => console.log(err));
+      .catch(handleQueryError);
   };
 
   // Fetch patients
@@ -38,7 +45,7 @@ function App() {
       .then((response) => {
         setOrder(response.data);
       })
-      .catch((err) => console.log(err));
+      .catch(handleQueryError);
     setOpen(true);
   };
 
@@ -48,7 +55,7 @@ function App() {
         // Refetch patient data.
         fetchPatientsData();
       })
-      .catch((err) => console.log(err));
+      .catch(handleQueryError);
     setOpen(false);
   };
 
@@ -78,6 +85,7 @@ function App() {
         onClose={handleClose}
         onSubmit={handleSubmit}
       />
+      <ErrorToast toastMessage={toastMessage} onClose={() => setToastMessage('')} />
     </ThemeProvider>
   );
 }

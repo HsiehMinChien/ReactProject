@@ -32,6 +32,7 @@
     "import/no-unresolved": 2,
     "import/prefer-default-export": 0,
     "semi": [2, "always"],
+    "react/jsx-props-no-spreading": "off",
     "max-len": [
       "error",
       {
