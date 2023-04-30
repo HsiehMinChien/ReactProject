@@ -1,2 +1,2 @@
 # Lint staged files
-yarn lint
+npm run lint
