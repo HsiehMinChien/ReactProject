@@ -17,6 +17,7 @@ export default function PatientsList({ patients, onItemClick }) {
           <ListItemButton
             key={`${patient.id}-${patient.name}-${patient.orderid}`}
             onClick={() => onItemClick(patient)}
+            divider
           >
             <ListItemIcon>
               <AccountCircleIcon fontSize="large" color={index % 2 ? 'primary' : 'action'} />

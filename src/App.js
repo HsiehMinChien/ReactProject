@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 import { basicApiUrl } from './config';
 import PatientsList from './components/PatientList';
 import OrderDialog from './components/OrderDialog';
-import ErrorToast from './components/ErrorToast';
+import Toast from './components/Toast';
 
 const darkTheme = createTheme({
   palette: {
@@ -19,11 +19,14 @@ function App() {
   const [selectedPatient, setSelectedPatient] = React.useState();
   const [order, setOrder] = React.useState([]);
   const [open, setOpen] = React.useState(false);
-  const [toastMessage, setToastMessage] = React.useState('');
+  const [toastInfo, setToastInfo] = React.useState({});
 
   const handleQueryError = (err) => {
     console.log(err);
-    setToastMessage(err.message);
+    setToastInfo({
+      severity: Toast.ToastSeverityMap.ERROR,
+      message: err.message,
+    });
   };
 
   const fetchPatientsData = () => {
@@ -54,6 +57,10 @@ function App() {
       .then(() => {
         // Refetch patient data.
         fetchPatientsData();
+        setToastInfo({
+          severity: Toast.ToastSeverityMap.SUCCESS,
+          message: 'Edit order successfully!!',
+        });
       })
       .catch(handleQueryError);
     setOpen(false);
@@ -85,7 +92,11 @@ function App() {
         onClose={handleClose}
         onSubmit={handleSubmit}
       />
-      <ErrorToast toastMessage={toastMessage} onClose={() => setToastMessage('')} />
+      <Toast
+        toastMessage={toastInfo.message}
+        severity={toastInfo.severity}
+        onClose={() => setToastInfo({})}
+      />
     </ThemeProvider>
   );
 }

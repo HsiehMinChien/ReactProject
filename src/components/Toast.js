@@ -9,21 +9,35 @@ function MuiAlertComponent(props, ref) {
 
 const Alert = React.forwardRef(MuiAlertComponent);
 
-export default function ErrorToast({ toastMessage, onClose }) {
+const ToastSeverityMap = {
+  ERROR: 'error',
+  WARNING: 'warning',
+  INFO: 'info',
+  SUCCESS: 'success',
+};
+
+export default function Toast({ toastMessage, onClose, severity }) {
   return (
     <Snackbar
       open={Boolean(toastMessage)}
       autoHideDuration={6000}
       onClose={onClose}
     >
-      <Alert onClose={onClose} severity="error" sx={{ width: '100%' }}>
+      <Alert onClose={onClose} severity={severity} sx={{ width: '100%' }}>
         {toastMessage}
       </Alert>
     </Snackbar>
   );
 }
 
-ErrorToast.propTypes = {
+Toast.ToastSeverityMap = ToastSeverityMap;
+
+Toast.defaultProps = {
+  severity: ToastSeverityMap.ERROR,
+};
+
+Toast.propTypes = {
   toastMessage: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
+  severity: PropTypes.oneOf(Object.values(ToastSeverityMap)),
 };

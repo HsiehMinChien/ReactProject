@@ -79,7 +79,7 @@ export default function OrderDialog({
         <DialogTitle id="responsive-dialog-title">
           {patient ? patient.name : ''}
           &apos;s order
-          <Button autoFocus onClick={handleClickEdit}>
+          <Button style={{ float: 'right' }} autoFocus onClick={handleClickEdit}>
             Edit
           </Button>
         </DialogTitle>
