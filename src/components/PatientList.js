@@ -40,10 +40,15 @@ export default function PatientsList({ patients, onItemClick }) {
   );
 }
 
+PatientsList.defaultProps = {
+  patients: [],
+  onItemClick: () => {},
+};
+
 PatientsList.propTypes = {
   patients: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
-    orderid: PropTypes.number
+    orderid: PropTypes.number,
   })),
   onItemClick: PropTypes.func,
-}
+};
